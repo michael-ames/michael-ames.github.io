@@ -29,6 +29,18 @@ clear:both;
   display:block;
 }
 
+.image-caption {
+text-align:center;
+margin-top:0;
+margin-bottom: 5%;
+color:grey;
+font-style:italic;
+font-size:.9em;
+}
+pre {
+    white-space: pre;
+    overflow-x: auto !important;
+}
 
 
  @media (max-width: 968px) {
@@ -62,16 +74,3 @@ padding: 5px 0px 5px 10px;
 clear:both;
 }
 */
-
-.image-caption {
-text-align:center;
-margin-top:0;
-margin-bottom: 5%;
-color:grey;
-font-style:italic;
-font-size:.9em;
-}
-pre {
-    white-space: pre;
-    overflow-x: auto !important;
-}
