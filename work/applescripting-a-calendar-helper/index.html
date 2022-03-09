@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html
+  class=""
+  lang="en-us"
+  prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#"
+>
+  <head>
+    <meta charset="utf-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="description" content="" />
+<meta name="HandheldFriendly" content="True" />
+<meta name="MobileOptimized" content="320" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="keywords" content="">
+
+
+<meta property="og:type" content="article" />
+<meta property="og:description" content="" />
+<meta property="og:title" content="Quickly adding calendar events with help from a little applescript" />
+<meta property="og:site_name" content="Michael Ames Brigham" />
+<meta property="og:image" content="" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="" />
+<meta property="og:image:height" content="" />
+<meta property="og:url" content="http://michael-ames.github.io/work/applescripting-a-calendar-helper/" />
+<meta property="og:locale" content="en-us" />
+<meta property="article:published_time" content="0001-01-01
+" /> <meta property="article:modified_time" content="0001-01-01
+" />
+
+
+
+
+
+
+    <title>Quickly adding calendar events with help from a little applescript</title>
+    <link rel="canonical" href="http://michael-ames.github.io/work/applescripting-a-calendar-helper/" />
+
+
+    <link
+  rel="stylesheet"
+  href="https://unpkg.com/tachyons@4.11.1/css/tachyons.min.css"
+/>
+
+<link rel="stylesheet" href="http://michael-ames.github.io/css/style.css" />
+<link rel="stylesheet" href="http://michael-ames.github.io/css/additions.css" />
+
+
+
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  </head>
+
+
+<body
+  lang="en-us"
+  class="sans-serif w-90 w-80-ns center center-ns mv2 mv5-ns"
+  itemscope
+  itemtype="http://schema.org/Article"
+>
+  
+  <span class="b">/ </span>
+  <a
+    href="http://michael-ames.github.io//work"
+    class="b bb bw1 pb1 no-underline black"
+    >Michael Ames Brigham/work</a>
+
+<article class="cf ph0 ph0-ns pv5">
+  <header class="fn fl-ns w-30-ns pr4-ns">
+    <h1 class="f2 lh-title fw9 mb3 mt0 pt3">
+      Quickly adding calendar events with help from a little applescript
+    </h1>
+    <h2 class="f3 mid-gray lh-title">
+Because I&#39;m too lazy to open the calendar application
+    </h2>
+    <time class="f6 ttu tracked gray">2021</time>
+  </header>
+  <div class="fn fl-ns w-50-ns">
+    <p class="f5 lh-copy measure mt0-ns">
+      <p>There are many kinds of information I enjoy tracking and reviewing in a digital format.
+Time is not one of them.</p>
+<p>After almost two decades of using them in earnest, I’ve never quite clicked with digital calendars. When circumstances permit, I’ll always enjoy paper ones (especially comically large desk pads and wall calendars). But I can’t ignore the two main benefits of digital versions — reminders and scheduling with others. So I’ve been stuck with ical, google, and outlook calendars over the years and cursed every time I needed to use it.</p>
+<p>One day during the never-ending pandemic I was frustrated enough and bored enough to make it a little less painful by scripting something little to make it easier to add calendar events using <em>mostly</em> natural language with a simple keyboard shorcut.</p>
+<p>(Apple already offers something similar with its “Create Quick Event” function in Calendar, but it requires opening and foregrounding the Calendar app to use.)</p>
+<div>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#how-it-works">How it works</a>
+      <ul>
+        <li><a href="#the-scripts">The scripts</a></li>
+      </ul>
+    </li>
+    <li><a href="#limitations">Limitations</a></li>
+    <li><a href="#thanks-are-in-order">Thanks are in order</a></li>
+    <li><a href="#frustrations-along-the-way">Frustrations along the way</a></li>
+  </ul>
+</nav>
+</div>
+<h2 id="how-it-works">How it works</h2>
+<p>In any application, I enter my keyboard shortcut and a dialog box appears:</p>
+<p>
+  <img src="../images/applescript/calendar_script_dialog.png" alt="screenshot of a macOS dialog box with the title text “New Event” above a single-line text entry field, and two buttons: cancel and ok (highlighted)">
+
+</p>
+<p>I then enter the new calendar item using <em>mostly</em> natural language in the following format, using the @ sign and a comma as separators:</p>
+<pre tabindex="0"><code>event name @ event time , duration
+</code></pre><ul>
+<li>The event name can be of any length and will appear in the calendar entry title field.</li>
+<li>The event time can include any 12h or 24h time (e.g. 7am, 14:30), day of the week or a calendar date. Entering a day of the week will place the event on the next instance.</li>
+<li>The event duration can be entered as minutes, hours, or by using the term “all day”.</li>
+</ul>
+<p>Here’s an example:
+
+  <img src="../images/applescript/calendar_script_dialog_entry.png" alt="screenshot of a macOS dialog box with the title text “New Event” above a single-line text entry field, with input “haircut @ 2pm Thursday, 75 minutes” and two buttons: cancel and ok (highlighted)">
+
+</p>
+<p>Click OK and the event will automatically (and quietly in the background) be added to your default calendar with your default alert settings.</p>
+<h3 id="the-scripts">The scripts</h3>
+<p>There are two scripts which work together behind the scenes: one to parse the information from the text input, and another to create the calendar entry based on that parse.</p>
+<p><strong>Parsing the entered text</strong></p>
+<p>The first script makes use of the @ and comma separators to parse the entry and assign values to variables eventName, eventTime, and eventLength:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-applescript" data-lang="applescript"><span style="display:flex;"><span><span style="color:#000">use</span> <span style="color:#000">AppleScript</span> <span style="color:#000">version</span> <span style="color:#4e9a06">&#34;2.4&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">use</span> <span style="color:#000">framework</span> <span style="color:#4e9a06">&#34;Foundation&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000">use</span> <span style="color:#000">scripting</span> <span style="color:#000">additions</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87">display dialog</span> <span style="color:#4e9a06">&#34;New Event:&#34;</span> <span style="color:#000">default</span> <span style="color:#000">answer</span> <span style="color:#4e9a06">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">eventText</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#c4a000">text returned</span> <span style="color:#204a87;font-weight:bold">of</span> <span style="color:#000">result</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">eventName</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">do shell script</span> <span style="color:#4e9a06">&#34;echo &#34;</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#000">eventText</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#4e9a06">&#34; | awk -F &#39;@|,&#39; &#39;{print $1}&#39;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">eventTime</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">do shell script</span> <span style="color:#4e9a06">&#34;echo &#34;</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#000">eventText</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#4e9a06">&#34; | awk -F &#39;@|,&#39; &#39;{print $2}&#39;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">eventLength</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">do shell script</span> <span style="color:#4e9a06">&#34;echo &#34;</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#000">eventText</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#4e9a06">&#34; | awk -F &#39;@|,&#39; &#39;{print $3}&#39;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87;font-weight:bold">my</span> <span style="color:#000">getDatesIn</span><span style="color:#000;font-weight:bold">:(</span><span style="color:#000">eventTime</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">considering </span><span style="color:#204a87">numeric strings</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">AppleScript</span>&#39;s <span style="color:#000">version</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#4e9a06">&#34;2.5&#34;</span> <span style="color:#204a87;font-weight:bold">then</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87;font-weight:bold">my</span> <span style="color:#000">makeASDateFrom</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theDate</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">theDate</span> <span style="color:#204a87;font-weight:bold">as</span> <span style="color:#000">date</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">end</span> <span style="color:#204a87;font-weight:bold">if</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">end</span> <span style="color:#204a87;font-weight:bold">considering</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># Date String Output</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">outputDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">my</span> <span style="color:#000">formatDate</span><span style="color:#000;font-weight:bold">:(</span><span style="color:#000">theDate</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000">usingFormat</span><span style="color:#000;font-weight:bold">:</span><span style="color:#4e9a06">&#34;MM-dd-y hh:mm a&#34;</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000">return</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">outputDate</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">eventName</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">eventLength</span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">--» HANDLERS</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">on</span> <span style="color:#000">formatDate</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theDate</span> <span style="color:#000">usingFormat</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">formatString</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">if</span> <span style="color:#c4a000">class</span> <span style="color:#204a87;font-weight:bold">of</span> <span style="color:#000">theDate</span> <span style="color:#204a87;font-weight:bold">is</span> <span style="color:#000">date</span> <span style="color:#204a87;font-weight:bold">then</span> <span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87;font-weight:bold">my</span> <span style="color:#000">makeNSDateFrom</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theDate</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theFormatter</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">current application</span>&#39;s <span style="color:#000">NSDateFormatter</span>&#39;s <span style="color:#204a87">new</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#000">theFormatter</span>&#39;s <span style="color:#000">setLocale</span><span style="color:#000;font-weight:bold">:(</span><span style="color:#000">current application</span>&#39;s <span style="color:#000">NSLocale</span>&#39;s <span style="color:#000">localeWithLocaleIdentifier</span><span style="color:#000;font-weight:bold">:</span><span style="color:#4e9a06">&#34;en_US_POSIX&#34;</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#000">theFormatter</span>&#39;s <span style="color:#000">setDateFormat</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">formatString</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theString</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">theFormatter</span>&#39;s <span style="color:#000">stringFromDate</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theDate</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#000">return</span> <span style="color:#000">theString</span> <span style="color:#204a87;font-weight:bold">as </span><span style="color:#000">text</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">end</span> <span style="color:#000">formatDate</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">usingFormat</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">on</span> <span style="color:#000">getDatesIn</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">aString</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8f5902;font-style:italic"># Convert string to Cocoa string</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">anNSString</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">current application</span>&#39;s <span style="color:#000">NSString</span>&#39;s <span style="color:#000">stringWithString</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">aString</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8f5902;font-style:italic"># Create data detector</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theDetector</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">current application</span>&#39;s <span style="color:#000">NSDataDetector</span>&#39;s <span style="color:#000">dataDetectorWithTypes</span><span style="color:#000;font-weight:bold">:(</span><span style="color:#000">current application</span>&#39;s <span style="color:#000">NSTextCheckingTypeDate</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#a40000">|</span><span style="color:#204a87;font-weight:bold">error</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">:(</span><span style="color:#000">missing value</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8f5902;font-style:italic"># Find first match in string; returns an NSTextCheckingResult object</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theMatch</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">theDetector</span>&#39;s <span style="color:#000">firstMatchInString</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">anNSString</span> <span style="color:#000">options</span><span style="color:#000;font-weight:bold">:</span><span style="color:#0000cf;font-weight:bold">0</span> <span style="color:#000">range</span><span style="color:#000;font-weight:bold">:{</span><span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">anNSString</span>&#39;s <span style="color:#a40000">|</span><span style="color:#000">length</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">()}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">theMatch</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">missing value</span> <span style="color:#204a87;font-weight:bold">then</span> <span style="color:#204a87;font-weight:bold">error</span> <span style="color:#4e9a06">&#34;No date found&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#8f5902;font-style:italic"># Get the date property of the NSTextCheckingResult</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">theMatch</span>&#39;s <span style="color:#a40000">|</span><span style="color:#000">date</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#000">return</span> <span style="color:#000">theDate</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">end</span> <span style="color:#000">getDatesIn</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic"># Required before 10.11</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">on</span> <span style="color:#000">makeASDateFrom</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theNSDate</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theCalendar</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">current application</span>&#39;s <span style="color:#000">NSCalendar</span>&#39;s <span style="color:#000">currentCalendar</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">comps</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">theCalendar</span>&#39;s <span style="color:#000">componentsInTimeZone</span><span style="color:#000;font-weight:bold">:(</span><span style="color:#000">missing value</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000">fromDate</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theNSDate</span> <span style="color:#8f5902;font-style:italic"># &#39;missing value&#39; means current time zone</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">tell</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#204a87">current date</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">theASDate</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">year</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">day</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">its</span> <span style="color:#204a87">month</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">day</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">time</span><span style="color:#000;font-weight:bold">}</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#4e9a06">¬
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"></span>		<span style="color:#000;font-weight:bold">{</span><span style="color:#204a87;font-weight:bold">it</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">comps</span>&#39;s <span style="color:#a40000">|</span><span style="color:#204a87">year</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">(),</span> <span style="color:#0000cf;font-weight:bold">1</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">comps</span>&#39;s <span style="color:#a40000">|</span><span style="color:#204a87">month</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">(),</span> <span style="color:#000">comps</span>&#39;s <span style="color:#a40000">|</span><span style="color:#204a87">day</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">(),</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">comps</span>&#39;s <span style="color:#000">hour</span><span style="color:#000;font-weight:bold">())</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000">hours</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">comps</span>&#39;s <span style="color:#000">minute</span><span style="color:#000;font-weight:bold">())</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000">minutes</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">comps</span>&#39;s <span style="color:#a40000">|</span><span style="color:#204a87">second</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">())}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#000">return</span> <span style="color:#000">theASDate</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">end</span> <span style="color:#000">makeASDateFrom</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span><span style="color:#8f5902;font-style:italic">------------------------------------------------------------</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">on</span> <span style="color:#000">makeNSDateFrom</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theASDate</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">theYear</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">theMonth</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">theDay</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">theSeconds</span><span style="color:#000;font-weight:bold">}</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">theASDate</span>&#39;s <span style="color:#000;font-weight:bold">{</span><span style="color:#204a87">year</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">month</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">day</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">time</span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">theYear</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#0000cf;font-weight:bold">0</span> <span style="color:#204a87;font-weight:bold">then</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theYear</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#ce5c00;font-weight:bold">-</span><span style="color:#000">theYear</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theEra</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#0000cf;font-weight:bold">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theEra</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#0000cf;font-weight:bold">1</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">end</span> <span style="color:#204a87;font-weight:bold">if</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theCalendar</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">current application</span>&#39;s <span style="color:#000">NSCalendar</span>&#39;s <span style="color:#000">currentCalendar</span><span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">newDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">theCalendar</span>&#39;s <span style="color:#000">dateWithEra</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theEra</span> <span style="color:#a40000">|</span><span style="color:#204a87">year</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theYear</span> <span style="color:#a40000">|</span><span style="color:#204a87">month</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">:(</span><span style="color:#000">theMonth</span> <span style="color:#204a87;font-weight:bold">as</span> <span style="color:#000">integer</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#4e9a06">¬
+</span></span></span><span style="display:flex;"><span><span style="color:#4e9a06"></span>		<span style="color:#a40000">|</span><span style="color:#204a87">day</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theDay</span> <span style="color:#000">hour</span><span style="color:#000;font-weight:bold">:</span><span style="color:#0000cf;font-weight:bold">0</span> <span style="color:#000">minute</span><span style="color:#000;font-weight:bold">:</span><span style="color:#0000cf;font-weight:bold">0</span> <span style="color:#a40000">|</span><span style="color:#204a87">second</span><span style="color:#a40000">|</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">theSeconds</span> <span style="color:#000">nanosecond</span><span style="color:#000;font-weight:bold">:</span><span style="color:#0000cf;font-weight:bold">0</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#000">return</span> <span style="color:#000">newDate</span>
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">end</span> <span style="color:#000">makeNSDateFrom</span><span style="color:#000;font-weight:bold">:</span>
+</span></span></code></pre></div><p><strong>Creating the calendar entry</strong></p>
+<p>The second script tells opens the apple calendar application and tells it what to do with the results of the first script:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-applescript" data-lang="applescript"><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">on</span> <span style="color:#204a87">run</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">input</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">parameters</span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">eventDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#000">date</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#204a87">item</span> <span style="color:#0000cf;font-weight:bold">1</span> <span style="color:#204a87;font-weight:bold">of</span> <span style="color:#000">input</span> <span style="color:#204a87;font-weight:bold">as </span><span style="color:#000">text</span><span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">eventName</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">item</span> <span style="color:#0000cf;font-weight:bold">2</span> <span style="color:#204a87;font-weight:bold">of</span> <span style="color:#000">input</span> <span style="color:#204a87;font-weight:bold">as </span><span style="color:#000">text</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">eventLength</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">item</span> <span style="color:#0000cf;font-weight:bold">3</span> <span style="color:#204a87;font-weight:bold">of</span> <span style="color:#000">input</span> <span style="color:#204a87;font-weight:bold">as </span><span style="color:#000">text</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">timeDigit</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">first</span> <span style="color:#204a87">word</span> <span style="color:#204a87;font-weight:bold">of</span> <span style="color:#000">eventLength</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">hourminute</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">second</span> <span style="color:#204a87">word</span> <span style="color:#204a87;font-weight:bold">of</span> <span style="color:#000">eventLength</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">hourminute</span> <span style="color:#204a87;font-weight:bold">is equal</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#4e9a06">&#34;minutes&#34;</span> <span style="color:#204a87;font-weight:bold">then</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">tell</span> <span style="color:#204a87">application</span> <span style="color:#4e9a06">&#34;Calendar&#34;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#204a87">activate</span>
+</span></span><span style="display:flex;"><span>			
+</span></span><span style="display:flex;"><span>			<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theCurrentDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">current date</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">newEvent</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">make</span> <span style="color:#204a87">new</span> <span style="color:#204a87">event</span> <span style="color:#204a87;font-weight:bold">in</span> <span style="color:#000">calendar</span> <span style="color:#4e9a06">&#34;your_calendar_name_here&#34;</span> <span style="color:#204a87">at</span> <span style="color:#204a87;font-weight:bold">end with</span> <span style="color:#c4a000">properties</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">summary</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">eventName</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">start</span> <span style="color:#000">date</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">eventDate</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">end</span> <span style="color:#000">date</span><span style="color:#000;font-weight:bold">:(</span><span style="color:#000">eventDate</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">timeDigit</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000">minutes</span><span style="color:#000;font-weight:bold">))}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">end</span> <span style="color:#204a87;font-weight:bold">tell</span>
+</span></span><span style="display:flex;"><span>		
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">else</span> <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#000">hourminute</span> <span style="color:#204a87;font-weight:bold">is equal</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#4e9a06">&#34;hours&#34;</span> <span style="color:#204a87;font-weight:bold">or</span> <span style="color:#000">hourminute</span> <span style="color:#204a87;font-weight:bold">is equal</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#4e9a06">&#34;hour&#34;</span> <span style="color:#204a87;font-weight:bold">then</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">tell</span> <span style="color:#204a87">application</span> <span style="color:#4e9a06">&#34;Calendar&#34;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#204a87">activate</span>
+</span></span><span style="display:flex;"><span>			
+</span></span><span style="display:flex;"><span>			<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theCurrentDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">current date</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">newEvent</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">make</span> <span style="color:#204a87">new</span> <span style="color:#204a87">event</span> <span style="color:#204a87;font-weight:bold">in</span> <span style="color:#000">calendar</span> <span style="color:#4e9a06">&#34;your_calendar_name_here&#34;</span> <span style="color:#204a87">at</span> <span style="color:#204a87;font-weight:bold">end with</span> <span style="color:#c4a000">properties</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">summary</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">eventName</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">start</span> <span style="color:#000">date</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">eventDate</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">end</span> <span style="color:#000">date</span><span style="color:#000;font-weight:bold">:(</span><span style="color:#000">eventDate</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">timeDigit</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000">hours</span><span style="color:#000;font-weight:bold">))}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">end</span> <span style="color:#204a87;font-weight:bold">tell</span>
+</span></span><span style="display:flex;"><span>		
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">tell</span> <span style="color:#204a87">application</span> <span style="color:#4e9a06">&#34;Calendar&#34;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#204a87">activate</span>
+</span></span><span style="display:flex;"><span>			
+</span></span><span style="display:flex;"><span>			<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">theCurrentDate</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">current date</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#204a87;font-weight:bold">set</span> <span style="color:#000">newEvent</span> <span style="color:#204a87;font-weight:bold">to</span> <span style="color:#204a87">make</span> <span style="color:#204a87">new</span> <span style="color:#204a87">event</span> <span style="color:#204a87;font-weight:bold">in</span> <span style="color:#000">calendar</span> <span style="color:#4e9a06">&#34;your_calendar_name_here&#34;</span> <span style="color:#204a87">at</span> <span style="color:#204a87;font-weight:bold">end with</span> <span style="color:#c4a000">properties</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">summary</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">eventName</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87">start</span> <span style="color:#000">date</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">eventDate</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">end</span> <span style="color:#000">date</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">eventDate</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">allday</span> <span style="color:#204a87">event</span><span style="color:#000;font-weight:bold">:</span><span style="color:#000">true</span><span style="color:#000;font-weight:bold">}</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#204a87;font-weight:bold">end</span> <span style="color:#204a87;font-weight:bold">tell</span>
+</span></span><span style="display:flex;"><span>		
+</span></span><span style="display:flex;"><span>	<span style="color:#204a87;font-weight:bold">end</span> <span style="color:#204a87;font-weight:bold">if</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#000">return</span> <span style="color:#000">input</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span><span style="color:#204a87;font-weight:bold">end</span> <span style="color:#204a87">run</span>
+</span></span></code></pre></div><p>(Note that you’ll need to swap “your_calendar_name_here” for the name of your calendar in the above script three times.)</p>
+<p>I’m sure there’s a way to combine these two scripts into one (and perhaps shorten them as well), but since I only dabble in applescript I took a shortcut and simply called them sequentially in an automator application.</p>
+<p>
+  <img src="../images/applescript/calendar_automator_application.png" alt="macOS Automator application screenshot showing first entry “Run Applescript” with the contents of the first script, and below another “Run Applescript” entry with the contents of the second script">
+
+</p>
+<p>Simply save it as an application, assign a keyboard shortcut (I use ⌘+.), and you’re good to go. (Note: the first time you use it in any application MacOS will prompt you for permission.)</p>
+<h2 id="limitations">Limitations</h2>
+<p>Could I have simply purchased Fantastical or any other better-than-stock calendar tools? Would they have provided more and better options? Yes, but I’m overly particular (at times) and cheap (at most times) and was curious to see if I could make this work. And for scheduling my own life and my own work, this does the trick.</p>
+<p>But I’ll note that this script cannot select from multiple calendars, adjust alerts, send invites, or add locations and notes as written. But it probably can be extended to offer at least some of those capabilities by:</p>
+<ul>
+<li>choosing an additional separator</li>
+<li>setting a new variable in the first script (e.g. eventNotes)</li>
+<li>calling that variable in the second script</li>
+</ul>
+<p>I might futz around with that in the future. If anyone else wants to give it a whirl, go ahead and let me know how it works.</p>
+<p>I’ll also note that this is, of course, limited to mac computers and will only work as long as applescript is supported.</p>
+<h2 id="thanks-are-in-order">Thanks are in order</h2>
+<p>I haven’t worked much in applescript before, so I couldn’t have built even this tiny thing without the help of others who have kindly shared their work with the world. This 
+
+<a href="https://calendartricks.com/how-to-create-a-new-event-in-calendar-with-applescript/" >
+calendar trick</a>
+
+ offered a very easy template to build from, and forms the core of the second script above. Christopher Stone provided the incredible 
+
+<a href="https://gist.github.com/ccstone/e8e4e0c5c7b15f422747" >
+applescript date parser</a>
+
+ which does all the lifting in the first script.</p>
+<h2 id="frustrations-along-the-way">Frustrations along the way</h2>
+<p>The primary obstacle is that Apple’s automator <code>display dialog</code> action only allows for a single text entry field. I thought I’d be able to make a dialog with three or four fields I could tab between, and assign their respective outputs to variables that the calendar could interpret, but no such luck.</p>
+<p>Someone on the keyboard maestro forums attempted 
+
+<a href="https://forum.keyboardmaestro.com/t/jims-add-an-event-to-apple-calendar-macro/21479/26" >
+this workaround</a>
+
+ using a series of dialogs and selecting from lists, but it ends up being just as much work as creating a new calendar entry manually.</p>
+<p>So I needed to be able to use a single text box to enter strings of variable length, and assign different segments to different variables. I ended up using 
+
+<a href="https://developer.apple.com/library/archive/documentation/OpenSource/Conceptual/ShellScripting/Howawk-ward/Howawk-ward.html" >
+awk</a>
+
+ for this, which let me assign arbitrary separators without too much trouble.</p>
+<p><strong>Choosing separators</strong></p>
+<p>To be truly natural-language, I’d use as separators the words we use in English all the time — <em>in two hours</em>, <em>for three minutes</em>, <em>on Saturday</em> — but that also mean I could never use these same words in the event name. And this limitation would really be constraining; event titles like <code>meet Erin in the park</code> or <code> buy gift for my sister</code> would be off the table because the parser would treat the prepositions here as separators. I’m certain there’s a way around this but it wasn’t worth going down that rabbit hole for such a simple, only-for-me tool. Hence the use of <code>@</code> and <code>,</code> as separators that I assume I’d never want to input as part of the actual name, time or duration.</p>
+<p><strong>Making duration work</strong></p>
+<p>Other solutions I saw had just (1)left the calendar default event time,  (2) had a select-from-list option, or (3)coded in a fixed amount per event, using this for 1 hour:</p>
+<pre tabindex="0"><code>end date:(eventDate + (60 * minutes))
+</code></pre><p>But I wanted to be able to specify the length of any event in my text input. Based on the code above, I could simply change <code>60</code> to a numeric variable — but that would mean I’d need to enter my duration in minutes all the time, which felt a bit unnatural. Same story with using hours; entering .25 for events with 15-minute lengths would just feel antithetical to this entire silly project.</p>
+<p>What I needed was a way to take a string like <code>1.5 hours</code> or <code>22 minutes</code> , split it into two parts (the digit and the unit-word), and analyze accordingly. I naively assumed it’d be a simple task for a script to distinguish between numeric and non-numeric input and work with the data that way, but this proved to be a dead-end (or at least a long and much-winding-path).</p>
+<p>But applescript does natively understand the concept of a <em>word</em>. Because my text entry includes a single space between digit and unit, these are automatically parsed as distinct words, and I could simply select them separately:</p>
+<pre tabindex="0"><code>set timeDigit to first word of eventLength
+set hourminute to second word of eventLength
+</code></pre><p>This seemed somehow too easy and a bit of a hack, but I wasn’t complaining.
+Now that I pulled these two apart, I could just sub them into the original script, right?
+<code>end date:(eventDate + (timeDigit * hourminute))</code></p>
+<p>Not so fast!</p>
+<p>Even though the value of <code>hourminute</code> will be either <em>hours</em> or <em>minutes</em>, for some reason applescript treats the variable value <em>minutes</em> or <em>hours</em> different from when I write those words directly into the script.</p>
+<p>So I instead decided to just duplicate the calls: one <em>tell calendar….</em> where the code would be (timeDigit * minutes), and another <em>tell calendar…</em> where it would say (timeDigit * hours).
+Now I just needed two conditionals:
+<code>if hourminute is equal to &quot;minutes” then...</code></p>
+<p><code>else if hourminute is equal to &quot;hours&quot; or hourminute is equal to &quot;hour” then...</code></p>
+<p>This also made it possible to handle entries containing either the singular or plural <em>hour</em> and <em>hours</em> (1 hour, 2 hours).</p>
+<p><strong>All-day events</strong></p>
+<p>When I got to this point, the franken-script I’d created worked well except it wanted to treat all duration entries as numbers; what about all day events?</p>
+<p>I tried using a single if statement when setting variables (e.g. <code>if second word contains “hour” or “hours” or “minutes” then…</code>) but that didn’t work. I ended up needing to write multiple less elegant and more specific statements using <code>is</code>:</p>
+<pre tabindex="0"><code>if second word is &#34;minutes&#34;...
+if second word is &#34;hours&#34;...
+</code></pre><p>and then letting the all-day be the default/elsewhere condition.</p>
+
+    </p>
+  </div>
+</article>
+
+  <footer>
+    <div>
+      <p class="f6 gray mt6 lh-copy">
+michael.ames.brigham@gmail.com</p>
+    </div>
+  </footer>
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
+
+<script>
+  hljs.initHighlightingOnLoad();
+</script>
+
+
+
+  </body>
+</html>

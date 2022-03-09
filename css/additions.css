@@ -71,4 +71,7 @@ color:grey;
 font-style:italic;
 font-size:.9em;
 }
-
+pre {
+    white-space: pre;
+    overflow-x: auto;
+}

@@ -59,5 +59,15 @@ I identified several challenges faced by end-users:
  lackof suitable recording spaces unfamiliarity with audio equipment difficulty explaining the project to patients and their families getting buy-in from colleagues and facility managementa connecting the project with other patient activities and company marketing  and focused the training content on addressing these common problems.</description>
     </item>
     
+    <item>
+      <title>Quickly adding calendar events with help from a little applescript</title>
+      <link>http://michael-ames.github.io/work/applescripting-a-calendar-helper/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://michael-ames.github.io/work/applescripting-a-calendar-helper/</guid>
+      <description>There are many kinds of information I enjoy tracking and reviewing in a digital format. Time is not one of them.
+After almost two decades of using them in earnest, I’ve never quite clicked with digital calendars. When circumstances permit, I’ll always enjoy paper ones (especially comically large desk pads and wall calendars). But I can’t ignore the two main benefits of digital versions — reminders and scheduling with others. So I’ve been stuck with ical, google, and outlook calendars over the years and cursed every time I needed to use it.</description>
+    </item>
+    
   </channel>
 </rss>
