@@ -83,6 +83,18 @@
         <li class="list pl0 lh-copy">
           <a
             class="f4 b dib black no-underline underline-hover"
+            href="https://michael-ames.github.io/work/sciencenter/"
+            >Psychology at the Sciencenter</a
+          >          <br><span
+            class="f6 gray db dib-ns"
+            >Let&#39;s make learning about sleep less of a snooze</span
+          >
+        </li><br>
+        
+        
+        <li class="list pl0 lh-copy">
+          <a
+            class="f4 b dib black no-underline underline-hover"
             href="https://michael-ames.github.io/work/palliative-care/"
             >Delivering palliative care in rural regions</a
           >          <br><span
@@ -171,13 +183,45 @@ michael.ames.brigham@gmail.com</p>
     </div>
   </footer>
   
+
+
+
+
+<div id="myModal" class="modal">
+  <button class="modal-close" onclick="closeModal()">close</button>
+  <div class="modal-content">
+    <img class="modal-pic" id="modalPic" onclick="closeModal()" style="max-width: 100%; max-height: 80vh; margin: auto;">
+  </div>
+</div>
+
+<script>
+
+function openModal(clicked_id) {
+  var src = document.getElementById(clicked_id).src;
+  if (src.includes("#")) {
+    src = src.substring(0, src.indexOf( "#" ));
+  };
+  document.getElementById("modalPic").src = src;
+  document.getElementById("myModal").style.display = "block";
+  
+  
+  document.getElementById("site-footer").style.display = "hidden";
+}
+
+
+function closeModal() { 
+  
+  document.getElementById("modalPic").src = "";
+  document.getElementById("myModal").style.display = "none";
+  
+  document.getElementById("site-footer").style.display = "block";
+}
+</script>  
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
 
 <script>
   hljs.initHighlightingOnLoad();
 </script>
-
-
 
 
 

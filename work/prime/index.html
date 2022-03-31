@@ -58,7 +58,7 @@
 
 <body
   lang="en-us"
-  class="sans-serif w-90 w-80-ns center center-ns mv2 mv5-ns"
+  class="sans-serif w-90 w-85-ns center center-ns mv2 mv5-ns"
   itemscope
   itemtype="http://schema.org/Article"
 >
@@ -78,15 +78,14 @@
 Environmental and behavioral design changes for quality sleep at the end-of-life
     </h2>
     <span class="f6 ttu tracked gray">Ithaca, NY</span><br>
-    <time class="f6 ttu tracked gray">2018-2020</time><br>
-    <span class="f6 ttu tracked gray">Role: Research Project Manager</span>
+    <time class="f6 ttu tracked gray">2018-2020</time><br><br>
+    <span class="f6 ttu tracked gray">Role(s):<br>Research Project Manager</span>
   </header>
-  <div class="fn fl-ns w-50-ns">
+  <div class="fn fl-ns w-50-ns pl4">
     <p class="f5 lh-copy measure mt0-ns">
       <p>Up to 80% of individuals at end-of-life experience sleep disruption, severely affecting their quality of life and and that of their caregivers. The traditional treatment approach is pharmacological, and although medications can improve sleep, they frequently result in serious side effects such as delirium or an increased risk in falls. Treatments such as behavioral and environmental interventions have been shown to be safer and equally effective, but much of this research has yet to make its way into daily practice. The Program for Improving and Managing the Environment for Sleep (PRIME) seeks to train palliative care professionals to adopt these non-pharmacological approaches and improve patient quality of life.</p>
 <p>
-  <img loading="lazy" src="../images/palliative/prime_website.jpeg" alt="screenshot of the homepage for the PRIME Sleep project study website">
-
+  <img class="md__image ma0" loading="lazy" id="[126 358 494 100 332 63]" src="../images/palliative/prime_website.jpeg" onclick="openModal(this.id)" alt="screenshot of the homepage for the PRIME Sleep project study website">
 </p>
 <p>In 2020, the first iteration of this training program was evaluated by palliative care staff (nurses, social workers, aides, chaplains, and managers) at two facilities in upstate New York. Our team sought to uncover the following:</p>
 <ul>
@@ -113,13 +112,45 @@ michael.ames.brigham@gmail.com</p>
     </div>
   </footer>
   
+
+
+
+
+<div id="myModal" class="modal">
+  <button class="modal-close" onclick="closeModal()">close</button>
+  <div class="modal-content">
+    <img class="modal-pic" id="modalPic" onclick="closeModal()" style="max-width: 100%; max-height: 80vh; margin: auto;">
+  </div>
+</div>
+
+<script>
+
+function openModal(clicked_id) {
+  var src = document.getElementById(clicked_id).src;
+  if (src.includes("#")) {
+    src = src.substring(0, src.indexOf( "#" ));
+  };
+  document.getElementById("modalPic").src = src;
+  document.getElementById("myModal").style.display = "block";
+  
+  
+  document.getElementById("site-footer").style.display = "hidden";
+}
+
+
+function closeModal() { 
+  
+  document.getElementById("modalPic").src = "";
+  document.getElementById("myModal").style.display = "none";
+  
+  document.getElementById("site-footer").style.display = "block";
+}
+</script>  
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
 
 <script>
   hljs.initHighlightingOnLoad();
 </script>
-
-
 
 
 

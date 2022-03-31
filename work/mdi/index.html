@@ -58,7 +58,7 @@
 
 <body
   lang="en-us"
-  class="sans-serif w-90 w-80-ns center center-ns mv2 mv5-ns"
+  class="sans-serif w-90 w-85-ns center center-ns mv2 mv5-ns"
   itemscope
   itemtype="http://schema.org/Article"
 >
@@ -78,18 +78,17 @@
 Sharing public-health data to support child well-being
     </h2>
     <span class="f6 ttu tracked gray">Vancouver, BC</span><br>
-    <time class="f6 ttu tracked gray">2018</time><br>
-    <span class="f6 ttu tracked gray">Role: Digital Community Lead</span>
+    <time class="f6 ttu tracked gray">2018</time><br><br>
+    <span class="f6 ttu tracked gray">Role(s):<br>Digital Community Lead</span>
   </header>
-  <div class="fn fl-ns w-50-ns">
+  <div class="fn fl-ns w-50-ns pl4">
     <p class="f5 lh-copy measure mt0-ns">
       <p>The Human Early Learning Partnership (HELP) at the University of British Columbia collects and disseminates population-level data on the well-being of children through the Middle Years Development Instrument (MDI). To increase uptake and support end-users’ understanding of these datasets, I worked with HELP to build its first online learning platform, Discover MDI.</p>
 <p>
-  <figure class="ma0">
-    <img loading="lazy" src="../images/mdi/discover_MDI_title.jpeg" alt="DiscoverMDI website banner with text “Discover MDI: A Field Guide to well-being in middle childhood” over a background photo of a pre-teen girl in the foreground and her family in the background, walking in the woods">
+  <figure class="md__image ma0">
+    <img loading="lazy" id="[152 495 451 322 369 5]" onclick="openModal(this.id)" src="../images/mdi/discover_MDI_title.jpeg" alt="DiscoverMDI website banner with text “Discover MDI: A Field Guide to well-being in middle childhood” over a background photo of a pre-teen girl in the foreground and her family in the background, walking in the woods">
     <figcaption class="image-caption">Discover MDI homepage</figcaption>
   </figure>
-
 </p>
 <p>After reviewing insights collected through focus groups and interviews, I designed and launched a pilot website aimed at HELP’s target audiences: educators, healthcare workers, and local and regional government employees. This website underwent a redesign several months later following additional rounds of user testing and interviews.</p>
 <ul>
@@ -115,13 +114,45 @@ michael.ames.brigham@gmail.com</p>
     </div>
   </footer>
   
+
+
+
+
+<div id="myModal" class="modal">
+  <button class="modal-close" onclick="closeModal()">close</button>
+  <div class="modal-content">
+    <img class="modal-pic" id="modalPic" onclick="closeModal()" style="max-width: 100%; max-height: 80vh; margin: auto;">
+  </div>
+</div>
+
+<script>
+
+function openModal(clicked_id) {
+  var src = document.getElementById(clicked_id).src;
+  if (src.includes("#")) {
+    src = src.substring(0, src.indexOf( "#" ));
+  };
+  document.getElementById("modalPic").src = src;
+  document.getElementById("myModal").style.display = "block";
+  
+  
+  document.getElementById("site-footer").style.display = "hidden";
+}
+
+
+function closeModal() { 
+  
+  document.getElementById("modalPic").src = "";
+  document.getElementById("myModal").style.display = "none";
+  
+  document.getElementById("site-footer").style.display = "block";
+}
+</script>  
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
 
 <script>
   hljs.initHighlightingOnLoad();
 </script>
-
-
 
 
 

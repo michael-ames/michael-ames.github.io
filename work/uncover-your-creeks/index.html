@@ -58,7 +58,7 @@
 
 <body
   lang="en-us"
-  class="sans-serif w-90 w-80-ns center center-ns mv2 mv5-ns"
+  class="sans-serif w-90 w-85-ns center center-ns mv2 mv5-ns"
   itemscope
   itemtype="http://schema.org/Article"
 >
@@ -78,10 +78,10 @@
 Government and citizen scientists protecting urban watersheds
     </h2>
     <span class="f6 ttu tracked gray">Vancouver, BC</span><br>
-    <time class="f6 ttu tracked gray">2012-2015</time><br>
-    <span class="f6 ttu tracked gray">Role: management</span>
+    <time class="f6 ttu tracked gray">2012-2015</time><br><br>
+    <span class="f6 ttu tracked gray">Role(s):<br>management</span>
   </header>
-  <div class="fn fl-ns w-50-ns">
+  <div class="fn fl-ns w-50-ns pl4">
     <p class="f5 lh-copy measure mt0-ns">
       <p>The national urban environmental non-profit organization Evergreen launched a three-year project to build an urban watershed network, connecting municipal and regional governments, researchers, allied non-profit organizations, and volunteer citizen scientists.</p>
 <p>With waterways so central to the ecology of the urban pacific northwest, the region needed better water quality data-sharing, more volunteer-supported data collection, and increased lay participation in local watershed planning.</p>
@@ -95,11 +95,10 @@ Government and citizen scientists protecting urban watersheds
 <li>Supported the work of other non-profits through joint fundraising</li>
 </ul>
 <p>
-  <figure class="ma0">
-    <img loading="lazy" src="../images/uyc/forum.jpg" alt="Photograph of a page from an annual Uncover Your Creeks report; the photograph shows urban watershed forum attendees engaged in discussion; underneath the photograph is a caption discussing the forum">
+  <figure class="md__image ma0">
+    <img loading="lazy" id="[186 201 434 134 125 120]" onclick="openModal(this.id)" src="../images/uyc/forum.jpg" alt="Photograph of a page from an annual Uncover Your Creeks report; the photograph shows urban watershed forum attendees engaged in discussion; underneath the photograph is a caption discussing the forum">
     <figcaption class="image-caption">A sample of the year-end project report, describing the events of the Urban Watershed Forum</figcaption>
   </figure>
-
 </p>
 
     </p>
@@ -113,13 +112,45 @@ michael.ames.brigham@gmail.com</p>
     </div>
   </footer>
   
+
+
+
+
+<div id="myModal" class="modal">
+  <button class="modal-close" onclick="closeModal()">close</button>
+  <div class="modal-content">
+    <img class="modal-pic" id="modalPic" onclick="closeModal()" style="max-width: 100%; max-height: 80vh; margin: auto;">
+  </div>
+</div>
+
+<script>
+
+function openModal(clicked_id) {
+  var src = document.getElementById(clicked_id).src;
+  if (src.includes("#")) {
+    src = src.substring(0, src.indexOf( "#" ));
+  };
+  document.getElementById("modalPic").src = src;
+  document.getElementById("myModal").style.display = "block";
+  
+  
+  document.getElementById("site-footer").style.display = "hidden";
+}
+
+
+function closeModal() { 
+  
+  document.getElementById("modalPic").src = "";
+  document.getElementById("myModal").style.display = "none";
+  
+  document.getElementById("site-footer").style.display = "block";
+}
+</script>  
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
 
 <script>
   hljs.initHighlightingOnLoad();
 </script>
-
-
 
 
 

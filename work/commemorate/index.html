@@ -58,7 +58,7 @@
 
 <body
   lang="en-us"
-  class="sans-serif w-90 w-80-ns center center-ns mv2 mv5-ns"
+  class="sans-serif w-90 w-85-ns center center-ns mv2 mv5-ns"
   itemscope
   itemtype="http://schema.org/Article"
 >
@@ -78,30 +78,78 @@
 Helping to preserve the stories of those living with memory loss
     </h2>
     <span class="f6 ttu tracked gray">Brooklyn, NY</span><br>
-    <time class="f6 ttu tracked gray">2011</time><br>
-    <span class="f6 ttu tracked gray">Role: Project Manager</span>
+    <time class="f6 ttu tracked gray">2011</time><br><br>
+    <span class="f6 ttu tracked gray">Role(s):<br>Project Manager, Interviews, Writing, Content Design, Webinars</span>
   </header>
-  <div class="fn fl-ns w-50-ns">
+  <div class="fn fl-ns w-50-ns pl4">
     <p class="f5 lh-copy measure mt0-ns">
-      <p>
-  <img loading="lazy" src="../images/commemorate/toolkit.jpeg" alt="sample page from the toolkit with text: Section 2: How to create a successful commemorate program, and three photographs: (1)two people in front of microphones with a facilitator recording the interview in the foreground; (2)a woman and her elderly mother, (3) two male friends">
-
-</p>
-<p>StoryCorps needed to turn a longstanding program recording the stories of participants with memory loss into a DIY model suitable for use by staff at long-term care facilities. As the lead consultant, I presented an initial program model to healthcare professionals and solicited feedback on its design.</p>
-<p>I identified several challenges faced by end-users:</p>
+      <h2 class="mb2">The Context</h2>
+<hr class="mt0">
+<p><span class="f6 ttu tracked gray">Client:</span><a href="www.StoryCorps.org">StoryCorps</a></p>
+<p><span class="f6 ttu tracked gray">Objective:</span> Turn an existing service into a DIY model</p>
+<p>StoryCorps needed to turn a longstanding program recording the stories of participants with memory loss into a DIY model suitable for use by staff at long-term care facilities. As the lead consultant, I interviewed intended end-users, developed a program model,  solicited feedback on its design, planned and launched the pilot.</p>
+<h2 class="mb2 mt5">Research, Design & Piloting </h2>
+<hr class="mt0">
+<br>
+<p class="f6 ttu tracked gray">Expert interviews</p>
+<p class="f6 ttu tracked gray">Focus groups</p>
+<p class="f6 ttu tracked gray">Content Design</p><br>
+<p>I identified several challenges faced by end-users, and focused the training content on addressing these common problems:</p>
 <ul>
-<li>lackof suitable recording spaces</li>
-<li>unfamiliarity with audio equipment</li>
-<li>difficulty explaining the project to patients and their families</li>
-<li>getting buy-in from colleagues and facility managementa</li>
-<li>connecting the project with other patient activities and company marketing</li>
+<li>
+<p>lack of suitable recording spaces</p>
+</li>
+<li>
+<p>unfamiliarity with audio equipment</p>
+</li>
+<li>
+<p>difficulty explaining the project to patients and their families</p>
+</li>
+<li>
+<p>getting buy-in from colleagues and facility management</p>
+</li>
+<li>
+<p>connecting the project with other patient activities and company marketing.</p>
+</li>
 </ul>
-<p>and focused the training content on addressing these common problems.</p>
-<p>I then led in-person and remote instructional sessions as part of a pilot program to evaluate the design of the program model and the accompanying toolkit.</p>
 <p>
-  <img loading="lazy" src="../images/commemorate/contents.jpeg" alt="image of the toolkit’s table of contents">
-
+  <img class="md__image ma0" loading="lazy" id="[74 196 120 248 431 463]" src="../images/commemorate/contents.jpeg" onclick="openModal(this.id)" alt="image of the toolkit’s table of contents">
 </p>
+<figcaption class="image-caption">Dividing the content<br/></figcaption>
+<table>
+<thead>
+<tr>
+<th>
+  <img class="md__image ma0" loading="lazy" id="[147 489 44 422 303 497]" src="../images/commemorate/interview_packet.jpg" onclick="openModal(this.id)" alt="interview_tips">
+</th>
+<th>
+  <img class="md__image ma0" loading="lazy" id="[172 36 474 360 232 395]" src="../images/commemorate/interview_steps.jpg" onclick="openModal(this.id)" alt="interview_steps">
+</th>
+</tr>
+</thead>
+</table>
+<figcaption class="image-caption"><br/>Part of a short explanatory packet for participants<br/></figcaption>
+<p>I then led in-person and remote instructional sessions as part of a pilot program to evaluate the design of the program model and the accompanying toolkit.</p>
+<h2 class="mb2 mt5">If I had to do it over again...</h2>
+<hr class="mt0">
+<p>These would be at the top of the list:<br><br></p>
+<ul>
+<li>
+<p><strong>Length</strong>: <br>This toolkit was <em>63 pages long</em><br><br></p>
+</li>
+<li>
+<p><strong>Identifying users</strong>: <br>We chose the users we already had, not necessarily the ones we needed. <br><br></p>
+</li>
+<li>
+<p><strong>Segmenting users</strong> and <strong>tailoring information</strong>: <br>Who needs to know what, and when?<br><br></p>
+</li>
+<li>
+<p><strong>(Re)Defining success</strong>: <br>What’s most important? Absolute fidelity to the StoryCorps model? The audio quality? Or the conversation happening at all?<br><br></p>
+</li>
+<li>
+<p><strong>Leveraging the brand</strong>: <br>Recording family stories isn’t novel. So why were people drawn to StoryCorps in particular?</p>
+</li>
+</ul>
 
     </p>
   </div>
@@ -114,13 +162,45 @@ michael.ames.brigham@gmail.com</p>
     </div>
   </footer>
   
+
+
+
+
+<div id="myModal" class="modal">
+  <button class="modal-close" onclick="closeModal()">close</button>
+  <div class="modal-content">
+    <img class="modal-pic" id="modalPic" onclick="closeModal()" style="max-width: 100%; max-height: 80vh; margin: auto;">
+  </div>
+</div>
+
+<script>
+
+function openModal(clicked_id) {
+  var src = document.getElementById(clicked_id).src;
+  if (src.includes("#")) {
+    src = src.substring(0, src.indexOf( "#" ));
+  };
+  document.getElementById("modalPic").src = src;
+  document.getElementById("myModal").style.display = "block";
+  
+  
+  document.getElementById("site-footer").style.display = "hidden";
+}
+
+
+function closeModal() { 
+  
+  document.getElementById("modalPic").src = "";
+  document.getElementById("myModal").style.display = "none";
+  
+  document.getElementById("site-footer").style.display = "block";
+}
+</script>  
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.14.2/highlight.min.js"></script>
 
 <script>
   hljs.initHighlightingOnLoad();
 </script>
-
-
 
 
 
