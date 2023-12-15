@@ -2,36 +2,29 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://michael-ames.github.io/work/palliative-care/</loc>
-    <lastmod>1969-12-31T19:33:41-05:00</lastmod>
+    <loc>https://example.org/notes/difference/</loc>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://michael-ames.github.io/</loc>
-    <lastmod>1969-12-31T19:33:41-05:00</lastmod>
+    <loc>https://example.org/</loc>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://michael-ames.github.io/work/sciencenter/</loc>
-    <lastmod>1969-12-31T19:33:41-05:00</lastmod>
+    <loc>https://example.org/notes/</loc>
+    <lastmod>2023-10-06T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://michael-ames.github.io/work/</loc>
-    <lastmod>1969-12-31T19:33:41-05:00</lastmod>
+    <loc>https://example.org/about/</loc>
   </url><url>
-    <loc>https://michael-ames.github.io/work/prime/</loc>
-    <lastmod>1969-12-31T19:33:40-05:00</lastmod>
+    <loc>https://example.org/categories/</loc>
   </url><url>
-    <loc>https://michael-ames.github.io/work/mdi/</loc>
-    <lastmod>1969-12-31T19:33:38-05:00</lastmod>
+    <loc>https://example.org/notes/firstpost/</loc>
   </url><url>
-    <loc>https://michael-ames.github.io/work/uncover-your-creeks/</loc>
-    <lastmod>1969-12-31T19:33:35-05:00</lastmod>
+    <loc>https://example.org/notes/secondpost/</loc>
   </url><url>
-    <loc>https://michael-ames.github.io/work/commemorate/</loc>
-    <lastmod>1969-12-31T19:33:31-05:00</lastmod>
+    <loc>https://example.org/notes/sn-copy/</loc>
   </url><url>
-    <loc>https://michael-ames.github.io/categories/</loc>
+    <loc>https://example.org/notes/sn/</loc>
   </url><url>
-    <loc>https://michael-ames.github.io/links/</loc>
+    <loc>https://example.org/tags/</loc>
   </url><url>
-    <loc>https://michael-ames.github.io/work/applescripting-a-calendar-helper/</loc>
-  </url><url>
-    <loc>https://michael-ames.github.io/series/</loc>
+    <loc>https://example.org/now/</loc>
   </url>
 </urlset>
